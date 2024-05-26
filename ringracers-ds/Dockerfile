@@ -31,9 +31,11 @@ RUN wget https://github.com/KartKrewDev/RingRacers/releases/download/v$VERSION/D
 
 # Copy executable to output directory
 COPY --from=builder /ringracers-source/build/ninja-release/bin/ringracers_v$VERSION /ringracers/ringracers
+# Copy startup script
+COPY ./startserver.sh /ringracers/startserver.sh
 
 EXPOSE 5029/udp
 
 STOPSIGNAL SIGINT
 
-ENTRYPOINT ["/bin/bash", "-c", "./ringracers -dedicated -room 33 -file ~/.ringracers/addons/*.*"]
+ENTRYPOINT ["sh", "./startserver.sh"]
