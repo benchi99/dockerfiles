@@ -34,6 +34,11 @@ COPY --from=builder /ringracers-source/build/ninja-release/bin/ringracers_v$VERS
 # Copy startup script
 COPY ./startserver.sh /ringracers/startserver.sh
 
+# Changes to user id 1000 to prevent container pivoting by being root user 
+RUN chown -R 1000:1000 /ringracers
+
+USER 1000
+
 EXPOSE 5029/udp
 
 STOPSIGNAL SIGINT
