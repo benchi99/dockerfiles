@@ -19,6 +19,8 @@ ARG VERSION=2.0
 
 WORKDIR /ringracers
 VOLUME /data
+ENV HOME=/ringracers
+RUN mkdir -p /data
 
 # Update apt and install dependencies/required tools
 RUN apt-get update \
@@ -27,7 +29,7 @@ RUN apt-get update \
 # Get and extract assets, symlink volume to data folder
 RUN wget https://github.com/KartKrewDev/RingRacers/releases/download/v$VERSION/Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip \
     && unzip Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip \
-    && ln -s /data /root/.ringracers
+    && ln -s /data /ringracers/.ringracers
 
 # Copy executable to output directory
 COPY --from=builder /ringracers-source/build/ninja-release/bin/ringracers_v$VERSION /ringracers/ringracers
@@ -35,7 +37,8 @@ COPY --from=builder /ringracers-source/build/ninja-release/bin/ringracers_v$VERS
 COPY ./startserver.sh /ringracers/startserver.sh
 
 # Changes to user id 1000 to prevent container pivoting by being root user 
-RUN chown -R 1000:1000 /ringracers
+RUN chown -R 1000:1000 /ringracers /data \
+    && chmod -R u+w /ringracers /data
 
 USER 1000
 
