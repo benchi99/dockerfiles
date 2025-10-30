@@ -1,4 +1,4 @@
-FROM debian:12-slim as builder
+FROM debian:12-slim AS builder
 
 ARG VERSION=2.0
 
@@ -26,10 +26,11 @@ RUN mkdir -p /data
 RUN apt-get update \
     && apt-get install -y wget unzip libcurl4-openssl-dev zlib1g libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libsdl2-dev
 
-# Get and extract assets, symlink volume to data folder
+# Get and extract assets, symlink volume to data folder, and clean up
 RUN wget https://github.com/KartKrewDev/RingRacers/releases/download/v$VERSION/Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip \
     && unzip Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip \
-    && ln -s /data /ringracers/.ringracers
+    && ln -s /data /ringracers/.ringracers \
+    && rm Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip
 
 # Copy executable to output directory
 COPY --from=builder /ringracers-source/build/ninja-release/bin/ringracers_v$VERSION /ringracers/ringracers
