@@ -4,11 +4,11 @@ ARG VERSION=2.0
 
 # Update apt and install dependencies/required tools
 RUN apt-get update
-RUN apt-get install -y git gcc cmake build-essential libcurl4-openssl-dev zlib1g libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libsdl2-dev ninja-build
+RUN apt-get install -y git gcc cmake build-essential libcurl4-openssl-dev zlib1g libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libsdl2-dev libopus-dev ninja-build
 
 # Clone project and build
 WORKDIR /ringracers-source
-RUN git clone https://git.do.srb2.org/KartKrew/RingRacers.git . \
+RUN git clone https://gitlab.com/kart-krew-dev/ring-racers.git . \
     && git checkout v$VERSION \
     && cmake --preset ninja-release \
     && cmake --build --preset ninja-release
@@ -24,7 +24,7 @@ RUN mkdir -p /data
 
 # Update apt and install dependencies/required tools
 RUN apt-get update \
-    && apt-get install -y wget unzip libcurl4-openssl-dev zlib1g libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libsdl2-dev
+    && apt-get install -y wget unzip libcurl4-openssl-dev zlib1g libpng-dev libogg-dev libvorbis-dev libvpx-dev libyuv-dev libsdl2-dev libopus-dev
 
 # Get and extract assets, symlink volume to data folder, and clean up
 RUN wget https://github.com/KartKrewDev/RingRacers/releases/download/v$VERSION/Dr.Robotnik.s-Ring-Racers-v$VERSION-Assets.zip \
